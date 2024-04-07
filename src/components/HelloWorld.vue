@@ -1,42 +1,51 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+   
+    <span>{{ num }}</span>
+    <button @click="add()">点击</button>
+    我是:{{ miku }} {{ msg }}
+    <button @click="biu()">测试调用</button>
   </div>
 </template>
 
-<script>
+<script >
+import { ref } from 'vue';
 export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
+  name:'app',
+  //获取父组建传过来的变量 和 自定义方法
+  props:['miku','msg'],
+  emits:['biubiu'],
+  //vue3通过setup定义变量  使用ref()的变量可以动态改变  并且通过对象.value来获取值
+  //setup可以添加两个参数一个是父组建传过来的值，一个是context对象
+  setup(props,context){
+    let num = ref(1);
+    let person = ref({
+      name : 'miku',
+      age : 14
+    })
+    console.log("我是props对象")
+    console.log(props)
+
+     console.log(context); //插槽
+    function add(){
+      console.log(num.value++)
+      // ${num};
+      console.log(person.value)
+      console.log(person.value.name) //显示miku
+    }
+    //可以通过context去调用父组件的方法
+    function biu(){
+      context.emit('biubiu',666);
+    }
+
+    return{
+      num,
+      add,
+      biu
+    }
   }
 }
+
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
